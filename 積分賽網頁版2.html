@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 連線版：開發積分賽 v22.0</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <style>
+        :root {
+            --primary: #ffce00; --bg: #0b0b0b; --card: rgba(22, 22, 22, 0.98);
+            --select-bg: #222222; --text: #fff; --success: #00ff88; --danger: #ff4d4f;
+            --tier0: #00d4ff; --tier1: #00ff88; --tier2: #ffce00; 
+            --tier3: #ff8e53; --tier4: #fe6b8b; --tier5: #cc00ff;
+            --rent-lv1: #888888; --rent-lv2: #00d4ff; --rent-lv3: #ffce00; --rent-lv4: #ff8e53; --rent-lv5: #cc00ff;
+        }
+        .main-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #000 0%, #1a1a1a 100%); z-index: -2; opacity: 0.5; filter: blur(3px); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 40%, transparent 10%, rgba(0,0,0,1) 90%); z-index: -1; }
+        body { font-family: 'PingFang TC', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        h1 { background: linear-gradient(to bottom, #fff 20%, #ffce00 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-size: 30px; font-weight: 900; margin: 20px 0; letter-spacing: 2px; }
+        .season-timer { background: rgba(40, 40, 40, 0.4); border: 2px solid var(--danger); border-radius: 25px; padding: 12px 40px; margin-bottom: 25px; text-align: center; backdrop-filter: blur(5px); animation: timer-glow 2s infinite ease-in-out; }
+        @keyframes timer-glow { 0%, 100% { box-shadow: 0 0 5px rgba(255, 77, 79, 0.4); } 50% { box-shadow: 0 0 25px rgba(255, 77, 79, 0.8); } }
+        .timer-digits { font-family: 'Courier New', monospace; font-size: 30px; color: #fff; font-weight: 900; text-shadow: 0 0 15px var(--danger); }
+        .leaderboard, .input-section, .history-section, .settings-section, .line-vault { width: 100%; max-width: 520px; background: var(--card); border-radius: 20px; padding: 25px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); box-sizing: border-box; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        h4 { color: #888; font-size: 13px; margin: 0 0 18px 0; letter-spacing: 2px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+        .player-card { background: rgba(255,255,255,0.02); border-radius: 12px; padding: 15px 20px; margin-bottom: 10px; border-left: 4px solid #333; position: relative; }
+        .player-info-top { display: flex; justify-content: space-between; align-items: center; }
+        .player-name-row { display: flex; align-items: center; gap: 10px; }
+        .player-name { font-size: 18px; font-weight: bold; }
+        .player-score { font-size: 24px; font-weight: 900; }
+        .idle-time-display { font-size: 12px; color: #666; }
+        .stats-line { font-size: 11px; color: #777; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .success-rate { color: var(--success); font-weight: bold; border-left: 1px solid #444; padding-left: 10px; }
+        .score-bar-bg { width: 100%; height: 6px; background: #111; border-radius: 3px; margin-top: 10px; overflow: hidden; }
+        .score-bar-fill { height: 100%; transition: width 0.8s ease; }
+        select { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #333; background: var(--select-bg); color: white; font-size: 16px; font-weight: 500; box-sizing: border-box; outline: none; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>'); background-repeat: no-repeat; background-position: right 15px center; margin-bottom: 12px; }
+        button#btn-submit { background: linear-gradient(90deg, #f88a6d 0%, #f76b8b 100%); border: none; cursor: pointer; width: 100%; padding: 18px; border-radius: 14px; color: #fff; font-size: 20px; font-weight: 900; margin-top: 10px; box-shadow: 0 4px 15px rgba(247, 107, 138, 0.3); }
+        .log-container { max-height: 350px; overflow-y: auto; font-size: 13px; padding-right: 10px; }
+        .log-item { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; flex-direction: column; gap: 6px; }
+        .log-meta { font-size: 10px; color: #444; display: flex; justify-content: space-between; }
+        .log-main { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .log-tag { margin-right: 8px; font-weight: 900; font-size: 14px; white-space: nowrap; }
+        .tag-lv1 { color: var(--rent-lv1); } .tag-lv2 { color: var(--rent-lv2); } .tag-lv3 { color: var(--rent-lv3); } .tag-lv4 { color: var(--rent-lv4); } .tag-lv5 { color: var(--rent-lv5); }
+        .log-score { font-weight: 900; color: var(--success); }
+        .line-item { padding: 15px 0; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .line-info-box { display: flex; align-items: center; font-size: 15px; color: #fff; gap: 8px; flex: 1; }
+        .note-input { width: 150px !important; margin: 0 !important; padding: 6px 10px !important; font-size: 12px !important; border: 1px solid #333 !important; background: #000 !important; border-radius: 8px !important; color: #fff !important; outline: none; }
+        .lock-btn { background: #333; color: #888; border: 1px solid #444; border-radius: 8px; padding: 6px; cursor: pointer; font-size: 12px; }
+        .lock-btn.locked { background: #1a1a1a; color: #444; border-color: #222; }
+    </style>
+</head>
+<body>
+    <div class="main-background"></div><div class="overlay"></div>
+    <h1>🏆 團隊開發積分賽：連線版</h1>
+    <div class="season-timer"><div class="timer-label">距離賽季結束倒數</div><div id="countdown" class="timer-digits">--D --:--:--</div></div>
+    <div class="leaderboard"><h4>📊 戰力排行 (同步更新)</h4><div id="rank-list">讀取雲端數據中...</div></div>
+    <div class="input-section"><h4>⚔️ 戰報結算</h4>
+        <select id="p-select"></select>
+        <select id="m-select"><option value="1">1萬以下</option><option value="1.1">1-2萬</option><option value="1.3">2-3萬</option><option value="1.5">3-4萬</option><option value="2">4萬以上</option></select>
+        <select id="r-select"><option value="100">接受服務費(+100)</option><option value="120">加Line配案(+120)</option><option value="50">要追蹤(+50)</option><option value="0.1">委婉拒絕</option><option value="0.01">狠狠拒絕</option></select>
+        <button id="btn-submit" onclick="processBattle()">結算並上傳雲端！</button>
+    </div>
+    <div class="history-section"><h4>📋 即時通訊</h4><div id="history-log" class="log-container"></div></div>
+    <div class="line-vault" id="line-section" style="display:none;"><h4>📱 實力累積</h4><div id="line-list"></div></div>
+    <div class="settings-section" style="text-align:center;">
+        <button onclick="toggleSettings()" style="background:none; border:1px solid #333; color:#666; font-size:11px; cursor:pointer; padding: 8px 20px; border-radius: 10px;">⚙️ 編制管理</button>
+        <div id="settings-content" style="display:none; margin-top:20px; padding-top: 15px; border-top: 1px solid #1a1a1a;">
+            <input type="text" id="name0" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:#fff;" placeholder="姓名1"><input type="text" id="name1" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:#fff;" placeholder="姓名2"><input type="text" id="name2" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #333; color:#fff;" placeholder="姓名3">
+            <button onclick="saveNames()" style="background:var(--success); border:none; padding:12px; width:100%; border-radius:10px; font-weight:bold;">更新全員姓名</button>
+            <button onclick="fullReset()" style="color:var(--danger); background:none; border:none; margin-top:15px; cursor:pointer;">🚨 重置雲端數據</button>
+        </div>
+    </div>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyBy4aSyxv9PYOHk1NSxYcCr3lsUQx6DuE8",
+          authDomain: "brawl-project.firebaseapp.com",
+          databaseURL: "https://brawl-project-default-rtdb.firebaseio.com",
+          projectId: "brawl-project",
+          storageBucket: "brawl-project.firebasestorage.app",
+          messagingSenderId: "235049960784",
+          appId: "1:235049960784:web:3fbe964579806e29fa5855"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const TIERS = [ { c: '#00d4ff', n: '青銅' }, { c: '#00ff88', n: '白銀' }, { c: '#ffce00', n: '黃金' }, { c: '#ff8e53', n: '白金' }, { c: '#fe6b8b', n: '鑽石' }, { c: '#cc00ff', n: '傳奇' } ];
+        let ps = [], logs = [], lineVault = [];
+        db.ref('team_data').on('value', (s) => { const d = s.val(); if (d) { ps = d.players || []; logs = d.logs || []; lineVault = d.lines || []; refreshUI(); } else { fullReset(true); } });
+        function getIdleTime(t) { if (!t) return "尚未開工"; const diff = new Date().getTime() - t; const m = Math.floor(diff/60000); if (m < 60) return `${m}分鐘前`; const h = Math.floor(m/60); if (h < 24) return `${h}小時前`; return `${Math.floor(h/24)}天前`; }
+        function getRentTagClass(v) { return v=="1"?"tag-lv1":v=="1.1"?"tag-lv2":v=="1.3"?"tag-lv3":v=="1.5"?"tag-lv4":v=="2"?"tag-lv5":""; }
+        function refreshUI() {
+            const sel = document.getElementById('p-select'); const cur = sel.value; sel.innerHTML = '';
+            ps.forEach(p => { let o = document.createElement('option'); o.value = p.n; o.innerText = p.n; sel.appendChild(o); }); if(cur) sel.value = cur;
+            const sorted = [...ps].sort((a,b) => b.s - a.s); let html = '';
+            sorted.forEach((p, i) => {
+                const t = TIERS[Math.min(Math.floor(p.s/3000), 5)];
+                html += `<div class="player-card" style="border-left-color:${t.c}"><div class="player-info-top"><div class="player-name-row"><span class="player-name">${p.n}</span><small style="color:${t.c}">[${t.n}]</small><span class="idle-time-display">${getIdleTime(p.lastTime)}開發</span></div><span class="player-score" style="color:${t.c}">${p.s.toFixed(0)}</span></div><div class="stats-line"><span>總開發：${p.count}次</span><span>成功率：${p.count>0?((p.s_count/p.count)*100).toFixed(1):0}%</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:${(p.s%3000)/30}%; background:${t.c}"></div></div></div>`;
+            });
+            document.getElementById('rank-list').innerHTML = html;
+            let logH = ''; logs.forEach((l, idx) => { logH += `<div class="log-item"><div class="log-meta"><span>${l.fullDate}</span><span>${l.name}</span></div><div class="log-main"><div class="log-tag ${getRentTagClass(l.mv)}">${l.rentRange}</div><span class="log-score">+${Math.floor(l.gain)}</span><div style="display:flex;gap:5px"><input type="text" class="note-input" value="${l.note||''}" ${l.locked?'disabled':''} onchange="updateLNote(${idx},this.value)"><button class="lock-btn ${l.locked?'locked':''}" onclick="lockL(${idx})">${l.locked?'🔒':'🔓'}</button></div></div></div>`; });
+            document.getElementById('history-log').innerHTML = logH || '等待開戰...';
+            if(lineVault.length > 0) { document.getElementById('line-section').style.display = 'block'; let lh = ''; lineVault.forEach((v, idx) => { lh += `<div class="line-item"><div class="line-info-box"><span style="color:#555;font-size:12px">${v.date}</span><span class="${getRentTagClass(v.mv)}">${v.n} | ${v.r}</span></div><div style="display:flex;gap:5px"><input type="text" class="note-input" value="${v.note||''}" ${v.locked?'disabled':''} onchange="updateVNote(${idx},this.value)"><button class="lock-btn ${v.locked?'locked':''}" onclick="lockV(${idx})">${v.locked?'🔒':'🔓'}</button></div></div>`; }); document.getElementById('line-list').innerHTML = lh; }
+        }
+        function upload() { db.ref('team_data').set({ players: ps, logs: logs, lines: lineVault }); }
+        function processBattle() {
+            const p = ps.find(x => x.n === document.getElementById('p-select').value); const r = parseFloat(document.getElementById('r-select').value);
+            let gain = (r >= 50) ? (r * parseFloat(document.getElementById('m-select').value)) + (p.combo * 10) : 0;
+            p.s += gain; if(r >= 100) p.s_count++; p.combo = (r >= 50) ? p.combo + 1 : 0; p.count++; p.lastTime = new Date().getTime();
+            const now = new Date(); const dStr = `${now.getMonth()+1}/${now.getDate()}`;
+            logs.unshift({ name: p.n, fullDate: `${dStr} ${now.getHours()}:${now.getMinutes()}`, mv: document.getElementById('m-select').value, rentRange: document.getElementById('m-select').options[document.getElementById('m-select').selectedIndex].text, gain: gain.toFixed(0), note: '', locked: false });
+            if(logs.length > 30) logs.pop();
+            if(r === 120) lineVault.unshift({ n: p.n, r: document.getElementById('m-select').options[document.getElementById('m-select').selectedIndex].text, mv: document.getElementById('m-select').value, date: dStr, note: '', locked: false });
+            if(lineVault.length > 30) lineVault.pop();
+            upload();
+        }
+        function updateLNote(i, v) { if(!logs[i].locked){ logs[i].note=v; upload(); } }
+        function updateVNote(i, v) { if(!lineVault[i].locked){ lineVault[i].note=v; upload(); } }
+        function lockL(i) { if(!logs[i].note)return; logs[i].locked=true; upload(); }
+        function lockV(i) { if(!lineVault[i].note)return; lineVault[i].locked=true; upload(); }
+        function toggleSettings() { const s = document.getElementById('settings-content'); s.style.display = s.style.display==='none'?'block':'none'; }
+        function saveNames() { for(let i=0; i<3; i++) { const v = document.getElementById('name'+i).value.trim(); if(v) ps[i].n = v; } upload(); toggleSettings(); }
+        function fullReset(s = false) { if(s || confirm('重置？')){ ps = [ {n:'卓威', s:0, combo:0, count:0, s_count:0, lastTime: null}, {n:'業務A', s:0, combo:0, count:0, s_count:0, lastTime: null}, {n:'業務B', s:0, combo:0, count:0, s_count:0, lastTime: null} ]; logs=[]; lineVault=[]; upload(); } }
+        setInterval(() => {
+            const now = new Date(); const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59); const diff = lastDay - now;
+            if (diff <= 0) { document.getElementById('countdown').innerHTML = "SEASON END"; return; }
+            document.getElementById('countdown').innerHTML = `${Math.floor(diff/86400000)}d ${Math.floor((diff%86400000)/3600000).toString().padStart(2,'0')}h ${Math.floor((diff%3600000)/60000).toString().padStart(2,'0')}m`;
+        }, 1000);
+    </script>
+</body>
+</html>
