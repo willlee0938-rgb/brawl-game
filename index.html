@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>🏆業務開發積分賽🏆</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -16,61 +20,37 @@
         .main-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000 no-repeat center center fixed; background-size: cover; z-index: -2; opacity: 0.7; filter: blur(2px); transition: background-image 0.5s ease; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: -1; opacity: 0.6; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #000; color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; overflow-x: hidden; }
-        
         h1 { font-size: 32px; font-weight: 900; margin: 20px 0 10px 0; background: linear-gradient(to bottom, #fff, var(--lv3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
-        
-        /* 🚀 倒數計時：強化閃爍與發光範圍 */
-        .season-timer { 
-            background: rgba(255, 0, 0, 0.15); border: 3px solid #ff4d4f; border-radius: 35px; 
-            padding: 12px 0; margin: 10px 0 25px 0; width: 100%; max-width: 420px; text-align: center; 
-            animation: warning-flash 1s infinite alternate ease-in-out;
-            box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-        @keyframes warning-flash { 
-            from { box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3), 0 0 5px rgba(255, 77, 79, 0.4); border-color: rgba(255, 77, 79, 0.6); } 
-            to { box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 77, 79, 1); border-color: rgba(255, 77, 79, 1); } 
-        }
-        .timer-label { font-size: 13px; font-weight: bold; color: #ff4d4f; margin-bottom: 5px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,0,0,0.8); }
-        .timer-digits { font-family: 'Courier New', monospace; font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.6); }
-
+        .season-timer { background: rgba(255, 0, 0, 0.15); border: 3px solid #ff4d4f; border-radius: 35px; padding: 12px 0; margin: 10px 0 25px 0; width: 100%; max-width: 420px; text-align: center; animation: warning-flash 1s infinite alternate ease-in-out; box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.5); }
+        @keyframes warning-flash { from { box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3), 0 0 5px rgba(255, 77, 79, 0.4); border-color: rgba(255, 77, 79, 0.6); } to { box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 77, 79, 1); border-color: rgba(255, 77, 79, 1); } }
+        .timer-label { font-size: 13px; font-weight: bold; color: #ff4d4f; margin-bottom: 5px; letter-spacing: 2px; }
+        .timer-digits { font-family: 'Courier New', monospace; font-size: 24px; font-weight: 900; color: #fff; }
         .container-box { width: 100%; max-width: 500px; background: var(--card); border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-sizing: border-box; }
         .h4-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         h4 { color: #888; font-size: 14px; margin: 0; display: flex; align-items: center; gap: 10px; }
-
         .side-trigger { background: #222; border: 1.5px solid var(--lv3); color: var(--lv3); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 900; }
-
         .player-card { background: rgba(255,255,255,0.02); border-radius: 15px; padding: 20px; margin-bottom: 12px; position: relative; cursor: pointer; }
         .score-display { position: absolute; top: 20px; right: 20px; font-size: 24px; font-weight: 600; }
         .combo-glow { display: inline-flex; align-items: center; gap: 5px; margin-left: 8px; padding: 4px 12px; border-radius: 10px; background: linear-gradient(90deg, #ffcc33, #ff9933); color: #000; font-weight: 900; font-size: 12px; animation: combo-bounce 1.5s infinite ease-in-out; }
         @keyframes combo-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-
-        select, button#btn-submit { width: 100%; padding: 18px; border-radius: 15px; border: none; background: var(--select-bg); color: #fff; font-size: 16px; margin-bottom: 15px; outline: none; appearance: none; }
+        select, button#btn-submit { width: 100%; padding: 18px; border-radius: 15px; border: none; background: #1a1a1a; color: #fff; font-size: 16px; margin-bottom: 15px; appearance: none; }
         button#btn-submit { background: #f87171; font-weight: 900; cursor: pointer; }
-
-        .scroll-log-container { max-height: 550px; overflow-y: auto; padding-right: 5px; }
+        .scroll-log-container { max-height: 550px; overflow-y: auto; }
         .scroll-log-container::-webkit-scrollbar { width: 0px; background: transparent; }
-
         .log-row { padding: 15px 0; border-bottom: 1px solid #1a1a1a; }
         .log-meta-text { font-size: 12px; color: #666; margin-bottom: 8px; font-weight: bold; }
         .log-content-main { display: flex; align-items: center; }
         .log-rent-text { font-size: 16px; font-weight: 800; min-width: 65px; display: inline-block; }
         .log-process-text { font-size: 13px; font-weight: 400; color: #aaa; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 10px; }
-        
-        /* 分數對齊：垂直同一列 */
         .score-align-box { min-width: 80px; text-align: left; padding-left: 15px; }
         .score-yellow { color: var(--lv3); font-style: italic; font-weight: 900; font-size: 15px; }
-        
         .note-input { background: #000; border: 1px solid #222; border-radius: 8px; padding: 6px 10px; color: #fff; width: 85px; font-size: 11px; margin-left: 10px; }
-
         .side-panel { position: fixed; top: 0; height: 100%; width: 85%; max-width: 400px; background: rgba(10, 10, 10, 0.98); z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 40px 20px; box-sizing: border-box; backdrop-filter: blur(20px); overflow-y: auto; }
         .left-panel { left: -100%; border-right: 1px solid rgba(255,255,255,0.1); }
         .left-panel.active { left: 0; }
         .right-panel { right: -100%; border-left: 1px solid rgba(255,255,255,0.1); }
         .right-panel.active { right: 0; }
-        
         .vault-item { padding: 15px 0; border-bottom: 1px solid #222; color: #eee; }
-        .vault-main { display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
-
         .stat-card { background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #333; }
         #victory-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; }
         .mg-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
@@ -80,65 +60,28 @@
 <body>
     <div id="main-bg" class="main-background"></div><div class="overlay"></div>
     <h1>🏆業務開發積分賽🏆</h1>
-    
-    <div class="season-timer">
-        <div class="timer-label">距 離 賽 季 結 束 倒 數</div>
-        <div id="countdown" class="timer-digits">00d 00h 00m 00s</div>
-    </div>
-
+    <div class="season-timer"><div class="timer-label">距 離 賽 季 結 束 倒 數</div><div id="countdown" class="timer-digits">00d 00h 00m 00s</div></div>
     <div class="container-box"><h4>📊 戰力排行</h4><div id="rank-list"></div></div>
-    
     <div class="container-box">
         <h4>⚔️ 戰報結算</h4>
         <select id="p-select"></select>
         <select id="m-select"><option value="1">1萬以下</option><option value="1.2">1.2-2萬</option><option value="1.4">2-3萬</option><option value="1.6">3-4萬</option><option value="2">4萬以上</option></select>
-        <select id="r-select">
-            <option value="100">接受服務費 (+100)</option>
-            <option value="120">加Line並配案 (+120)</option>
-            <option value="1">暫時拒絕但可追蹤 (+0)</option>
-            <option value="0">被屋主拒絕 (+0)</option>
-        </select>
+        <select id="r-select"><option value="100">接受服務費 (+100)</option><option value="120">加Line並配案 (+120)</option><option value="1">暫時拒絕但可追蹤 (+0)</option><option value="0">被屋主拒絕 (+0)</option></select>
         <button id="btn-submit" onclick="processBattle()">結算並送出</button>
     </div>
-
-    <div class="container-box">
-        <div class="h4-row">
-            <h4>📋 即時戰況回報</h4>
-            <button class="side-trigger" onclick="toggleVault()">可配案列表🏃</button>
-        </div>
-        <div id="history-log" class="scroll-log-container"></div>
-    </div>
-
+    <div class="container-box"><div class="h4-row"><h4>📋 即時戰況回報</h4><button class="side-trigger" onclick="toggleVault()">可配案列表🏃</button></div><div id="history-log" class="scroll-log-container"></div></div>
     <div style="text-align:center; padding: 20px 0;"><button onclick="toggleSettings()" style="background:none; border:1px solid #333; color:#666; font-size:11px; padding: 8px 20px; border-radius: 10px;">⚙️ 遊戲管理</button>
-        <div id="settings-content" style="display:none; margin-top:20px; max-width: 300px; margin-left: auto; margin-right: auto;">
-            <button class="mg-btn" style="background:#222; color:#aaa;" onclick="changeGameBG()">更換遊戲背景網址</button>
-            <button class="mg-btn" style="background:#400; color:#ff4d4f; border:1px solid #600;" onclick="fullReset()">🚨 賽季數據歸零</button>
-        </div>
+        <div id="settings-content" style="display:none; margin-top:20px; max-width: 300px; margin-left: auto; margin-right: auto;"><button class="mg-btn" style="background:#222; color:#aaa;" onclick="changeGameBG()">更換遊戲背景網址</button><button class="mg-btn" style="background:#400; color:#ff4d4f; border:1px solid #600;" onclick="fullReset()">🚨 賽季數據歸零</button></div>
     </div>
-
-    <div id="vault-panel" class="side-panel left-panel">
-        <span onclick="toggleVault()" style="position:absolute;top:20px;right:20px;font-size:30px;color:#666;cursor:pointer;">×</span>
-        <h3 style="margin-top:0;">📱 可配案物件列表</h3>
-        <div id="line-list"></div>
-    </div>
-
-    <div id="dashboard" class="side-panel right-panel">
-        <span onclick="closeDB()" style="position:absolute;top:20px;left:20px;font-size:30px;color:#666;cursor:pointer;">×</span>
-        <div id="db-content"></div>
-    </div>
-
-    <div id="victory-mask">
-        <div style="width:80%; max-width:350px; background:#000; border-radius:20px; padding:40px 20px; text-align:center;" id="vic-box">
-            <h2 id="vic-title" style="letter-spacing:5px;">VICTORY</h2><h1 id="vic-score" style="font-size:70px;">+0</h1><p id="vic-msg" style="color:#888;margin-bottom:20px;"></p>
-            <button onclick="document.getElementById('victory-mask').style.display='none'" style="background:var(--primary);border:none;padding:15px 40px;border-radius:10px;font-weight:900;cursor:pointer;">收下榮耀</button>
-        </div>
-    </div>
-
+    <div id="vault-panel" class="side-panel left-panel"><span onclick="toggleVault()" style="position:absolute;top:20px;right:20px;font-size:30px;color:#666;cursor:pointer;">×</span><h3 style="margin-top:0;">📱 可配案物件列表</h3><div id="line-list"></div></div>
+    <div id="dashboard" class="side-panel right-panel"><span onclick="closeDB()" style="position:absolute;top:20px;left:20px;font-size:30px;color:#666;cursor:pointer;">×</span><div id="db-content"></div></div>
+    <div id="victory-mask"><div style="width:80%; max-width:350px; background:#000; border-radius:20px; padding:40px 20px; text-align:center;" id="vic-box"><h2 id="vic-title" style="letter-spacing:5px;">VICTORY</h2><h1 id="vic-score" style="font-size:70px;">+0</h1><p id="vic-msg" style="color:#888;margin-bottom:20px;"></p><button onclick="document.getElementById('victory-mask').style.display='none'" style="background:var(--primary);border:none;padding:15px 40px;border-radius:10px;font-weight:900;cursor:pointer;">收下榮耀</button></div></div>
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBy4aSyxv9PYOHk1NSxYcCr3lsUQx6DuE8", authDomain: "brawl-project.firebaseapp.com", databaseURL: "https://brawl-project-default-rtdb.firebaseio.com", projectId: "brawl-project", storageBucket: "brawl-project.firebasestorage.app", messagingSenderId: "235049960784", appId: "1:235049960784:web:3fbe964579806e29fa5855" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         let ps = [], logs = [], config = { bg: 'bg.jpg' };
+        const TIERS = [ { c: '#a1a1a1', n: '青銅' }, { c: '#00d4ff', n: '白銀' }, { c: '#ffce00', n: '黃金' }, { c: '#ff8e53', n: '白金' }, { c: '#ff00ff', n: '傳奇' } ];
 
         db.ref('team_data').on('value', (s) => { 
             const d = s.val(); 
@@ -158,16 +101,15 @@
             ps.forEach(p => { let o = document.createElement('option'); o.value = p.n; o.innerText = p.n; sel.appendChild(o); }); if(cur) sel.value = cur;
             const sorted = [...ps].sort((a,b) => b.s - a.s); let html = '';
             sorted.forEach((p) => {
-                const tierIdx = Math.min(Math.floor((p.s||0)/2000), 4); const t = TIERS[tierIdx];
-                const comboHtml = p.combo > 0 ? `<span class="combo-glow">🔥 ${p.combo} COMBO</span>` : '';
-                html += `<div class="player-card" style="border-left: 4px solid ${t.c}" onclick="showDB('${p.n}')"><div style="font-size:18px;font-weight:bold;">${p.n} <span style="color:${t.c};font-size:14px;">[${t.n}]</span> ${comboHtml}</div><div style="font-size:12px;color:#444;margin-top:8px;">總開發：${p.count || 0} 次 &nbsp;&nbsp; ${getIdle(p.lastTime)}</div><div class="score-display" style="color:${t.c}">${Math.floor(p.s)}</div><div class="progress-bg"><div class="progress-fill" style="width:${(p.s % 2000) / 20}%;background:${t.c}"></div></div></div>`;
+                const t = TIERS[Math.min(Math.floor((p.s||0)/2000), 4)];
+                html += `<div class="player-card" style="border-left: 4px solid ${t.c}" onclick="showDB('${p.n}')"><div style="font-size:18px;font-weight:bold;">${p.n} <span style="color:${t.c};font-size:14px;">[${t.n}]</span> ${p.combo>0?`<span class="combo-glow">🔥 ${p.combo} COMBO</span>`:''}</div><div style="font-size:12px;color:#444;margin-top:8px;">總開發：${p.count || 0} 次 &nbsp;&nbsp; ${getIdle(p.lastTime)}</div><div class="score-display" style="color:${t.c}">${Math.floor(p.s)}</div><div class="progress-bg"><div class="progress-fill" style="width:${(p.s%2000)/20}%;background:${t.c}"></div></div></div>`;
             });
             document.getElementById('rank-list').innerHTML = html;
             
             let logH = ''; logs.slice(0, 50).forEach((l, idx) => {
-                const pureProcess = l.process ? l.process.replace(/\(\+\d+\)/g, '').trim() : ''; 
+                const pureP = l.process ? l.process.replace(/\(\+\d+\)/g, '').trim() : ''; 
                 const scoreText = l.gain >= 0 ? `+${l.gain}` : l.gain;
-                logH += `<div class="log-row"><div class="log-meta-text">${l.fullDate}  &nbsp; ${l.name}</div><div class="log-content-main"><span class="log-rent-text ${getL(l.rentRange)}">${l.rentRange||''}</span><span class="log-process-text">${pureProcess}</span><div class="score-align-box"><span class="score-yellow">&nbsp;&nbsp;&nbsp;&nbsp;${scoreText}</span></div><input type="text" class="note-input" placeholder="備註" value="${l.note||''}" onchange="upN(${idx},this.value)"><button onclick="lock(${idx})" style="background:none;border:none;color:${l.locked?'var(--lv3)':'#222'};cursor:pointer;padding-left:8px;">🔒</button></div></div>`;
+                logH += `<div class="log-row"><div class="log-meta-text">${l.fullDate}  &nbsp; ${l.name}</div><div class="log-content-main"><span class="log-rent-text ${getL(l.rentRange)}">${l.rentRange||''}</span><span class="log-process-text">${pureP}</span><div class="score-align-box"><span class="score-yellow">&nbsp;&nbsp;&nbsp;&nbsp;${scoreText}</span></div><input type="text" class="note-input" placeholder="備註" value="${l.note||''}" onchange="upN(${idx},this.value)"><button onclick="lock(${idx})" style="background:none;border:none;color:${l.locked?'var(--lv3)':'#222'};cursor:pointer;padding-left:8px;">🔒</button></div></div>`;
             });
             document.getElementById('history-log').innerHTML = logH || '<div style="color:#444;text-align:center;margin-top:20px;">等待回報中...</div>';
             
@@ -222,7 +164,6 @@
         function closeDB() { document.getElementById('dashboard').classList.remove('active'); }
         function fullReset() { if(confirm('⚠️ 數據歸零？')){ ps.forEach(p => { p.s=0; p.combo=0; p.count=0; p.fee_count=0; p.line_count=0; p.refused_count=0; p.lastTime=null; }); db.ref('team_data').set({ players: ps, logs: [], config: config }); alert('已重置！'); } }
         
-        const TIERS = [ { c: '#a1a1a1', n: '青銅' }, { c: '#00d4ff', n: '白銀' }, { c: '#ffce00', n: '黃金' }, { c: '#ff8e53', n: '白金' }, { c: '#ff00ff', n: '傳奇' } ];
         setInterval(() => {
             const now = new Date(); const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59); const diff = lastDay - now;
             if (diff <= 0) { document.getElementById('countdown').innerHTML = "SEASON END"; return; }
