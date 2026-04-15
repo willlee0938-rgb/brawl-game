@@ -20,7 +20,7 @@
         .main-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000 no-repeat center center fixed; background-size: cover; z-index: -2; opacity: 0.7; filter: blur(2px); transition: background-image 0.5s ease; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: -1; opacity: 0.6; }
         
-        /* 置中佈局修復 */
+        /* 佈局置中 */
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #000; color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; overflow-x: hidden; min-height: 100vh; }
         
         .nav-btn { position: fixed; top: 25px; left: 20px; z-index: 1001; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
@@ -35,7 +35,7 @@
 
         h1 { font-size: 32px; font-weight: 900; margin: 20px 0 10px 0; background: linear-gradient(to bottom, #fff, var(--lv3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; text-align: center; }
         
-        .season-timer { background: rgba(255, 0, 0, 0.15); border: 3px solid #ff4d4f; border-radius: 35px; padding: 12px 0; margin: 10px 0 25px 0; width: 100%; max-width: 420px; text-align: center; animation: warning-flash 1s infinite alternate ease-in-out; box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.5); }
+        .season-timer { background: rgba(255, 0, 0, 0.15); border: 3px solid #ff4d4f; border-radius: 35px; padding: 12px 0; margin: 10px 0 25px 0; width: 100%; text-align: center; animation: warning-flash 1s infinite alternate ease-in-out; box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.5); }
         @keyframes warning-flash { from { box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3), 0 0 5px rgba(255, 77, 79, 0.4); border-color: rgba(255, 77, 79, 0.6); } to { box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 77, 79, 1); border-color: rgba(255, 77, 79, 1); } }
         .timer-label { font-size: 13px; font-weight: bold; color: #ff4d4f; margin-bottom: 5px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,0,0,0.8); }
         .timer-digits { font-family: 'Courier New', monospace; font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.6); }
@@ -54,20 +54,20 @@
         select, button#btn-submit { width: 100%; padding: 18px; border-radius: 15px; border: none; background: var(--select-bg); color: #fff; font-size: 16px; margin-bottom: 15px; outline: none; appearance: none; }
         button#btn-submit { background: #f87171; font-weight: 900; cursor: pointer; }
 
-        /* 戰況對齊邏輯 */
+        /* [手機版文字修復] 移除 nowrap，讓文字能完整顯示 */
         .scroll-log-container { max-height: 550px; overflow-y: auto; width: 100%; }
         .log-row { padding: 15px 0; border-bottom: 1px solid #1a1a1a; width: 100%; }
-        .log-meta-text { font-size: 12px; color: #666; margin-bottom: 8px; font-weight: bold; }
-        .log-content-main { display: flex; align-items: center; width: 100%; gap: 10px; }
-        .log-rent-box { width: 75px; flex-shrink: 0; }
+        .log-meta-text { font-size: 11px; color: #666; margin-bottom: 8px; font-weight: bold; }
+        .log-content-main { display: flex; align-items: center; width: 100%; gap: 6px; }
+        .log-rent-box { width: 60px; flex-shrink: 0; }
         .log-rent-text { font-size: 13px; font-weight: 800; }
-        .log-process-text { font-size: 12px; color: #aaa; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .score-yellow { width: 45px; text-align: right; color: var(--lv3); font-weight: 900; font-size: 14px; flex-shrink: 0; }
-        .note-container { width: 65px; flex-shrink: 0; }
-        .note-input { background: #000; border: 1px solid #222; border-radius: 8px; padding: 6px 4px; color: #fff; width: 100%; font-size: 11px; box-sizing: border-box; }
-        .action-cell { width: 32px; flex-shrink: 0; display: flex; justify-content: center; } 
-        .delete-cell { width: 28px; flex-shrink: 0; display: flex; justify-content: center; } 
-        .btn-action { background: none; border: none; cursor: pointer; padding: 5px; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+        .log-process-text { font-size: 12px; color: #aaa; flex-grow: 1; line-height: 1.2; word-break: break-all; } /* 移除 ellipsis，改用換行 */
+        .score-yellow { width: 40px; text-align: right; color: var(--lv3); font-weight: 900; font-size: 13px; flex-shrink: 0; }
+        .note-container { width: 60px; flex-shrink: 0; }
+        .note-input { background: #000; border: 1px solid #222; border-radius: 8px; padding: 6px 4px; color: #fff; width: 100%; font-size: 10px; box-sizing: border-box; }
+        .action-cell { width: 30px; flex-shrink: 0; display: flex; justify-content: center; } 
+        .delete-cell { width: 25px; flex-shrink: 0; display: flex; justify-content: center; } 
+        .btn-action { background: none; border: none; cursor: pointer; padding: 4px; font-size: 15px; display: flex; align-items: center; justify-content: center; }
 
         .side-panel { position: fixed; top: 0; right: -100%; height: 100%; width: 85%; max-width: 400px; background: rgba(10, 10, 10, 0.98); z-index: 1000; transition: 0.4s; padding: 30px 20px; box-sizing: border-box; backdrop-filter: blur(20px); overflow-y: auto; }
         .side-panel.active { right: 0; border-left: 1px solid rgba(255,255,255,0.1); }
@@ -131,7 +131,7 @@
             </select>
             <button id="btn-submit" onclick="processBattle()">結算並送出</button>
         </div>
-        <div class="container-box"><h4>📋 即時戰況回報</h4><div id="history-log" class="scroll-log-container"></div></div>
+        <div class="container-box"><h4>📋 即時戰況</h4><div id="history-log" class="scroll-log-container"></div></div>
     </div>
 
     <div id="page-vault" class="page-content">
@@ -140,7 +140,7 @@
         <div class="container-box"><div style="color:var(--lv2); font-weight:bold; margin-bottom:10px;">🏃 可配案物件</div><div id="line-list"></div></div>
     </div>
 
-    <div id="page-analysis" class="page-content"><h2 style="color:var(--lv2); margin: 20px 0;">📊 全團隊統計</h2><div class="container-box"><h4>🏠 房型分佈</h4><canvas id="roomChart"></canvas></div><div class="container-box"><h4>🕒 開發熱點</h4><canvas id="timeChart"></canvas></div></div>
+    <div id="page-analysis" class="page-content"><h2 style="color:var(--lv2); margin: 20px 0;">📊 全團隊統計</h2><div class="container-box"><h4>🏠 房型分佈</h4><canvas id="roomChart"></canvas></div><div class="container-box"><h4>🕒 開發熱點分析</h4><canvas id="timeChart"></canvas></div></div>
 
     <div id="dashboard" class="side-panel"><span onclick="closeDB()" style="position:absolute;top:20px;left:20px;font-size:30px;color:#666;cursor:pointer;">×</span><div id="db-content"></div></div>
     
@@ -148,9 +148,9 @@
         <h3 style="color:var(--lv3); text-align:center;">戰力指標算法說明</h3>
         <p style="font-size:12px; color:#ccc;"><b>⚔️ 進攻力：</b>直接委託 / 成功件數。代表攻堅高品質物件能力。</p>
         <p style="font-size:12px; color:#ccc;"><b>⚡ 轉換力：</b>成功加分項 / 總開發量。反映話術與精準度。</p>
-        <p style="font-size:12px; color:#ccc;"><b>🔋 持久力：</b>個人總量 / 團隊總量。全滿即為100%貢獻。</p>
+        <p style="font-size:12px; color:#ccc;"><b>🔋 持久力：</b>個人總量 / 團隊總量。代表開發勤奮比重。</p>
         <p style="font-size:12px; color:#ccc;"><b>🤝 親和力：</b>加Line總數 / 成功件數。代表建立長期關係能力。</p>
-        <p style="font-size:12px; color:#ccc;"><b>📉 穩定度：</b>過去10個日曆天內有加分的天數比例。</p>
+        <p style="font-size:12px; color:#ccc;"><b>📉 穩定度：</b>過去10日曆天內有加分的天數比例。</p>
         <p style="text-align:center; font-size:10px; color:#666;">(點擊任意處關閉)</p>
     </div>
 
@@ -188,7 +188,18 @@
                 const canE = Date.now() - (l.timestamp || 0) < 7200000;
                 const isTrack = l.process.includes("暫時拒絕但可追蹤");
                 const actionBtn = isTrack ? `<button onclick="convertLog(${idx})" class="btn-action">🔄</button>` : (l.gain > 0 ? `<button onclick="toggleLock(${idx})" class="btn-action">${l.locked ? '🔒' : '🔓'}</button>` : '');
-                return `<div class="log-row"><div class="log-meta-text">${l.fullDate} | ${l.name}</div><div class="log-content-main"><div class="log-rent-box"><span class="log-rent-text ${getL(l.rentRange)}">${l.rentRange}</span></div><span class="log-process-text">${l.process.split('(')[0]}</span><span class="score-yellow">${l.gain>0?'+'+l.gain:''}</span><div class="note-container"><input type="text" class="note-input" value="${l.note||''}" onchange="upN(${idx},this.value)" ${(!canE && l.locked)?'disabled':''}></div><div class="action-cell">${actionBtn}</div><div class="delete-cell"><button onclick="deleteLog(${idx})" class="btn-action" style="color:#ff4d4f;">×</button></div></div></div>`;
+                
+                return `<div class="log-row">
+                    <div class="log-meta-text">${l.fullDate} | ${l.name}</div>
+                    <div class="log-content-main">
+                        <div class="log-rent-box"><span class="log-rent-text ${getL(l.rentRange)}">${l.rentRange}</span></div>
+                        <span class="log-process-text">${l.process.split('(')[0]}</span>
+                        <span class="score-yellow">${l.gain>0?'+'+l.gain:''}</span>
+                        <div class="note-container"><input type="text" class="note-input" value="${l.note||''}" onchange="upN(${idx},this.value)" ${(!canE && l.locked)?'disabled':''}></div>
+                        <div class="action-cell">${actionBtn}</div>
+                        <div class="delete-cell"><button onclick="deleteLog(${idx})" class="btn-action" style="color:#ff4d4f;">×</button></div>
+                    </div>
+                </div>`;
             }).join('');
 
             let cH = '', lH = '';
@@ -287,7 +298,7 @@
             const rValRaw = document.getElementById('r-select').value; const rVal = parseFloat(rValRaw); const m = parseFloat(document.getElementById('m-select').value); const now = new Date();
             if(rValRaw === '999') {
                 logs.unshift({ name: p.n, fullDate: `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${now.getMinutes().toString().padStart(2,'0')}`, gain: 0, process: "暫時拒絕但可追蹤", rentRange: document.getElementById('m-select').options[document.getElementById('m-select').selectedIndex].text, roomType: document.getElementById('type-select').value, note: '', locked: false, type: 'line', timestamp: now.getTime() });
-                p.count = (p.count || 0) + 1; // 追蹤也計入總開發
+                p.count = (p.count || 0) + 1; // [鎖定] 追蹤也計入總開發
                 db.ref('team_data').set({ players: ps, logs, config, archives });
                 showVictory(0, getRandomEncouragement(false, true), false);
                 return;
@@ -313,7 +324,7 @@
         function renderCharts() {
             if(rc) rc.destroy(); if(tc) tc.destroy();
             const rd = ["雅房", "套房", "2房", "3房", "4房"].map(t => logs.filter(l => l.roomType === t).length);
-            rc = new Chart(document.getElementById('roomChart'), { type: 'bar', data: { labels: ["雅房", "套房", "2房", "3房", "4房"], datasets: [{ label: '物件量', data: rd, backgroundColor: '#00d4ff' }] } });
+            rc = new Chart(document.getElementById('roomChart'), { type: 'bar', data: { labels: ["雅房", "套房", "2房", "3房", "4房"], datasets: [{ label: '案件數', data: rd, backgroundColor: '#00d4ff' }] } });
             const td = new Array(24).fill(0); logs.forEach(l => { if(l.timestamp) td[new Date(l.timestamp).getHours()]++; });
             tc = new Chart(document.getElementById('timeChart'), { type: 'line', data: { labels: Array.from({length:24},(_,i)=>i+':00'), datasets: [{ label: '熱度', data: td, borderColor: '#ffce00' }] } });
         }
@@ -326,7 +337,6 @@
         function addNewPlayer() { const n = prompt("姓名："); if(n) { ps.push({n, s:0, count:0, fee_count:0, con_count:0, line_count:0, refused_count:0, combo:0, avatar:""}); db.ref('team_data/players').set(ps); } }
         function removePlayer() { const n = prompt("移除姓名："); if(n) { ps = ps.filter(x => x.n !== n); db.ref('team_data/players').set(ps); } }
         function changeName(old) { const n = prompt("新姓名：", old); if(n){ const p = ps.find(x=>x.n===old); p.n=n; db.ref('team_data/players').set(ps); showDB(n); } }
-        function changeA(n) { const u = prompt("照片網址："); if(u){ ps.find(x=>x.n===n).avatar=u; db.ref('team_data/players').set(ps); showDB(n); } }
         function hU(n) { const f = document.getElementById('fI').files[0]; if(f){ const r = new FileReader(); r.onload=(e)=>{ ps.find(x=>x.n===n).avatar=e.target.result; db.ref('team_data/players').set(ps); showDB(n); }; r.readAsDataURL(f); } }
         function changeGameBG() { const u = prompt("網址："); if(u){ config.bg = u; db.ref('team_data/config').set(config); } }
         function fullReset() { if(confirm('歸零？')){ archives.unshift({date:Date.now(), totalCount:logs.length}); ps.forEach(p=>{p.s=0;p.count=0;p.combo=0;p.fee_count=0;p.con_count=0;p.line_count=0;p.refused_count=0;}); db.ref('team_data').set({players:ps, logs:[], config, archives}); } }
