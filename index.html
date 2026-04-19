@@ -53,14 +53,14 @@
         select, button#btn-submit { width: 100%; padding: 18px; border-radius: 15px; border: none; background: var(--select-bg); color: #fff; font-size: 16px; margin-bottom: 15px; outline: none; appearance: none; }
         button#btn-submit { background: #f87171; font-weight: 900; cursor: pointer; }
 
-        /* 戰況對齊邏輯 */
+        /* [重要] 手機版介面自動優化 CSS */
         .scroll-log-container { max-height: 550px; overflow-y: auto; width: 100%; }
         .log-row { padding: 15px 0; border-bottom: 1px solid #1a1a1a; width: 100%; }
         .log-meta-text { font-size: 12px; color: #666; margin-bottom: 8px; font-weight: bold; }
         .log-content-main { display: flex; align-items: center; width: 100%; gap: 10px; }
         .log-rent-box { width: 75px; flex-shrink: 0; }
         .log-rent-text { font-size: 13px; font-weight: 800; }
-        .log-process-text { font-size: 12px; color: #aaa; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .log-process-text { font-size: 12px; color: #aaa; flex-grow: 1; word-break: break-all; line-height: 1.3; } /* 換行確保顯示 */
         .score-yellow { width: 45px; text-align: right; color: var(--lv3); font-weight: 900; font-size: 14px; flex-shrink: 0; }
         .note-container { width: 65px; flex-shrink: 0; }
         .note-input { background: #000; border: 1px solid #222; border-radius: 8px; padding: 6px 4px; color: #fff; width: 100%; font-size: 11px; box-sizing: border-box; }
@@ -68,20 +68,14 @@
         .delete-cell { width: 28px; flex-shrink: 0; display: flex; justify-content: center; } 
         .btn-action { background: none; border: none; cursor: pointer; padding: 5px; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
-        .side-panel { position: fixed; top: 0; right: -100%; height: 100%; width: 85%; max-width: 400px; background: rgba(10, 10, 10, 0.98); z-index: 1000; transition: 0.4s; padding: 30px 20px; box-sizing: border-box; backdrop-filter: blur(20px); overflow-y: auto; }
-        .side-panel.active { right: 0; border-left: 1px solid rgba(255,255,255,0.1); }
-        .stat-card { background: #1a1a1a; padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid #333; font-size: 11px; color: #888; }
-        .stat-card span { font-size: 18px; font-weight: 900; color: #fff; display: block; margin-top: 5px; }
+        @media (max-width: 600px) {
+            .log-content-main { gap: 6px; }
+            .log-rent-box { width: 60px; }
+            .note-container { width: 55px; }
+            .score-yellow { width: 38px; font-size: 13px; }
+        }
 
-        .radar-box { position: relative; width: 100%; height: 260px; margin: 10px 0; display: flex; justify-content: center; align-items: center; }
-        canvas#dbRadarChart { max-width: 100% !important; max-height: 100% !important; }
-        .radar-info-btn { position: absolute; bottom: 5px; right: 10px; background: #333; color: #666; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #444; z-index: 10; }
-        #radar-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 320px; background: #1a1a1a; border: 1px solid var(--lv3); padding: 20px; border-radius: 20px; z-index: 3000; display: none; }
-        #victory-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; }
-        .mg-btn { padding: 12px; border-radius: 10px; border: none; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-        .tag-lv1 { color: var(--lv1); } .tag-lv2 { color: var(--lv2); } .tag-lv3 { color: var(--lv3); } .tag-lv4 { color: var(--lv4); } .tag-lv5 { color: var(--lv5); }
-
-        /* 列表排版修正：標題字體縮小 + 備註叉叉絕對對齊 */
+        /* 列表排版：字體優化與對齊 */
         .vault-item { padding: 15px 12px; border-bottom: 1px solid #222; display: flex; align-items: center; width: 100%; box-sizing: border-box; }
         .vault-info { flex-grow: 1; min-width: 0; }
         .vault-header { font-size: 16px; font-weight: 800; margin-bottom: 4px; color: #fff; } 
@@ -89,6 +83,18 @@
         .vault-detail-note { width: 140px; margin-right: 15px; flex-shrink: 0; } 
         .vault-input { background: #000; border: 1px solid #333; border-radius: 8px; padding: 8px; color: #fff; width: 100%; font-size: 11px; box-sizing: border-box; }
         .vault-delete-btn { width: 25px; flex-shrink: 0; text-align: center; color: #f44; cursor: pointer; font-weight: bold; font-size: 18px; }
+
+        .side-panel { position: fixed; top: 0; right: -100%; height: 100%; width: 85%; max-width: 400px; background: rgba(10, 10, 10, 0.98); z-index: 1000; transition: 0.4s; padding: 30px 20px; box-sizing: border-box; backdrop-filter: blur(20px); overflow-y: auto; }
+        .side-panel.active { right: 0; border-left: 1px solid rgba(255,255,255,0.1); }
+        .stat-card { background: #1a1a1a; padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid #333; font-size: 11px; color: #888; }
+        .stat-card span { font-size: 18px; font-weight: 900; color: #fff; display: block; margin-top: 5px; }
+
+        .radar-box { position: relative; width: 100%; max-width: 320px; height: 260px; margin: 10px auto; display: flex; justify-content: center; align-items: center; }
+        canvas#dbRadarChart { max-width: 100% !important; max-height: 100% !important; }
+        .radar-info-btn { position: absolute; bottom: 5px; right: 10px; background: #333; color: #666; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #444; z-index: 10; }
+        #radar-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 320px; background: #1a1a1a; border: 1px solid var(--lv3); padding: 20px; border-radius: 20px; z-index: 3000; display: none; }
+        #victory-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        .mg-btn { padding: 12px; border-radius: 10px; border: none; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -152,18 +158,6 @@
 
     <div id="dashboard" class="side-panel"><span onclick="closeDB()" style="position:absolute;top:20px;left:20px;font-size:30px;color:#666;cursor:pointer;">×</span><div id="db-content"></div></div>
     
-    <div id="radar-modal" onclick="this.style.display='none'">
-        <h3 style="color:var(--lv3); text-align:center;">戰力指標算法說明</h3>
-        <p style="font-size:12px; color:#ccc;"><b>⚔️ 進攻力：</b>直接委託 / 成功件數。代表攻堅高品質物件能力。</p>
-        <p style="font-size:12px; color:#ccc;"><b>⚡ 轉換力：</b>成功加分項 / 總開發量。反映話術與精準度。</p>
-        <p style="font-size:12px; color:#ccc;"><b>🔋 持久力：</b>個人總量 / 團隊總量。代表開發貢獻比。</p>
-        <p style="font-size:12px; color:#ccc;"><b>🤝 親和力：</b>加Line總數 / 成功件數。代表維護關係能力。</p>
-        <p style="font-size:12px; color:#ccc;"><b>📉 穩定度：</b>過去10個日曆天內有加分的天數比例。</p>
-        <p style="text-align:center; font-size:10px; color:#666;">(點擊任意處關閉)</p>
-    </div>
-
-    <div id="victory-mask"><div style="width:80%; max-width:350px; background:#000; border-radius:20px; padding:40px 20px; text-align:center; border: 2px solid #333;" id="vic-box"><h2 id="vic-title" style="letter-spacing:5px;">VICTORY</h2><h1 id="vic-score" style="font-size:70px;">+0</h1><p id="vic-msg" style="color:#888;margin-bottom:20px;"></p><button onclick="document.getElementById('victory-mask').style.display='none'" style="background:var(--primary);border:none;padding:15px 40px;border-radius:10px;font-weight:900;cursor:pointer;">收下榮耀</button></div></div>
-
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBy4aSyxv9PYOHk1NSxYcCr3lsUQx6DuE8", authDomain: "brawl-project.firebaseapp.com", databaseURL: "https://brawl-project-default-rtdb.firebaseio.com", projectId: "brawl-project", storageBucket: "brawl-project.firebasestorage.app", messagingSenderId: "235049960784", appId: "1:235049960784:web:3fbe964579806e29fa5855" };
         firebase.initializeApp(firebaseConfig);
@@ -189,8 +183,6 @@
             const sorted = [...ps].sort((a,b) => b.s - a.s);
             document.getElementById('rank-list').innerHTML = sorted.map(p => {
                 const t = TIERS[Math.min(Math.floor((p.s||0)/2000), 4)];
-                
-                // [補回] 計算距離上一次開發的時間
                 const pLogs = logs.filter(l => l.name === p.n);
                 const lastTime = pLogs.length > 0 ? pLogs[0].timestamp : 0;
                 let timeStr = "尚未開發";
@@ -215,7 +207,6 @@
                 return `<div class="log-row"><div class="log-meta-text">${l.fullDate} | ${l.name}</div><div class="log-content-main"><div class="log-rent-box"><span class="log-rent-text ${getL(l.rentRange)}">${l.rentRange}</span></div><span class="log-process-text">${l.process.split('(')[0]}</span><span class="score-yellow">${l.gain>0?'+'+l.gain:''}</span><div class="note-container"><input type="text" class="note-input" value="${l.note||''}" onchange="upN(${idx},this.value)" ${(!canE && l.locked)?'disabled':''}></div><div class="action-cell">${actionBtn}</div><div class="delete-cell"><button onclick="deleteLog(${idx})" class="btn-action" style="color:#ff4d4f;">×</button></div></div></div>`;
             }).join('');
 
-            // 可配案列表：標題字體調整 + 獨立細節備註 (listDetail)
             let cH = '', lH = '';
             logs.filter(l => l.locked).forEach(v => { 
                 const oI = logs.indexOf(v);
@@ -225,7 +216,7 @@
                         <div class="vault-subtitle">${v.name} | ${v.roomType} | ${v.rentRange}</div>
                     </div>
                     <div class="vault-detail-note">
-                        <input type="text" class="vault-input" value="${v.listDetail||''}" onchange="upLD(${oI},this.value)" placeholder="輸入細節價格...">
+                        <input type="text" class="vault-input" value="${v.listDetail||''}" onchange="upLD(${oI},this.value)" placeholder="輸入價格細節...">
                     </div>
                     <div class="vault-delete-btn" onclick="toggleLock(${oI})">×</div>
                 </div>`;
@@ -259,7 +250,7 @@
                     <div class="stat-card">追蹤中<span>${currentTracks}</span></div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
-                    <button onclick="changeName('${n}')" style="background:#333;color:#fff;border:none;padding:12px;border-radius:10px;font-size:12px;">更改姓名</button>
+                    <button onclick="changeName('${n}')" style="background:#333;color:#fff;border:none;padding:12px;border-radius:10px;font-size:12px;font-weight:bold;">更改姓名</button>
                     <button onclick="document.getElementById('fI').click()" style="background:var(--success);color:#000;border:none;padding:12px;border-radius:10px;font-size:12px;font-weight:bold;">上傳照片</button>
                 </div>
                 <button onclick="changeA('${n}')" style="width:100%;margin-top:10px;background:#1a1a1a;color:#666;border:none;padding:10px;border-radius:10px;font-size:12px;">更換照片網址</button>
@@ -347,7 +338,7 @@
         function renderCharts() {
             if(rc) rc.destroy(); if(tc) tc.destroy();
             const rd = ["雅房", "套房", "2房", "3房", "4房"].map(t => logs.filter(l => l.roomType === t).length);
-            rc = new Chart(document.getElementById('roomChart'), { type: 'bar', data: { labels: ["雅房", "套房", "2房", "3房", "4房"], datasets: [{ label: '物件量', data: rd, backgroundColor: '#00d4ff' }] } });
+            rc = new Chart(document.getElementById('roomChart'), { type: 'bar', data: { labels: ["雅房", "套房", "2房", "3房", "4房"], datasets: [{ label: '案件數', data: rd, backgroundColor: '#00d4ff' }] } });
             const td = new Array(24).fill(0); logs.forEach(l => { if(l.timestamp) td[new Date(l.timestamp).getHours()]++; });
             tc = new Chart(document.getElementById('timeChart'), { type: 'line', data: { labels: Array.from({length:24},(_,i)=>i+':00'), datasets: [{ label: '熱度', data: td, borderColor: '#ffce00' }] } });
         }
@@ -361,6 +352,7 @@
         function addNewPlayer() { const n = prompt("姓名："); if(n) { ps.push({n, s:0, count:0, fee_count:0, con_count:0, line_count:0, refused_count:0, combo:0, avatar:""}); db.ref('team_data/players').set(ps); } }
         function removePlayer() { const n = prompt("移除姓名："); if(n) { ps = ps.filter(x => x.n !== n); db.ref('team_data/players').set(ps); } }
         function changeName(old) { const n = prompt("新姓名：", old); if(n){ const p = ps.find(x=>x.n===old); p.n=n; db.ref('team_data/players').set(ps); showDB(n); } }
+        function changeA(n) { const u = prompt("照片網址："); if(u){ ps.find(x=>x.n===n).avatar=u; db.ref('team_data/players').set(ps); showDB(n); } }
         function hU(n) { const f = document.getElementById('fI').files[0]; if(f){ const r = new FileReader(); r.onload=(e)=>{ ps.find(x=>x.n===n).avatar=e.target.result; db.ref('team_data/players').set(ps); showDB(n); }; r.readAsDataURL(f); } }
         function changeGameBG() { const u = prompt("網址："); if(u){ config.bg = u; db.ref('team_data/config').set(config); } }
         function fullReset() { if(confirm('歸零？')){ archives.unshift({date:Date.now(), totalCount:logs.length}); ps.forEach(p=>{p.s=0;p.count=0;p.combo=0;p.fee_count=0;p.con_count=0;p.line_count=0;p.refused_count=0;}); db.ref('team_data').set({players:ps, logs:[], config, archives}); } }
